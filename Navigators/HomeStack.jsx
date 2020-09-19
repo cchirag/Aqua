@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 export default function HomeStack(){
     return(
         <Stack.Navigator>
-            <Stack.Screen name = 'Dashboard' component = {DashboardScreen}></Stack.Screen>
+            <Stack.Screen name = 'Dashboard' component = {DashboardScreen} options = {{header: () => null}}></Stack.Screen>
             <Stack.Screen name = 'Global Stats' component = {GlobalStatsScreen}></Stack.Screen>
         </Stack.Navigator>
     )

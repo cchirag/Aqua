@@ -15,11 +15,12 @@ export default function AppStack() {
         options={{header: () => null}}></Stack.Screen>
       <Stack.Screen
         name="SignIn Screen"
-        component={SignInScreen}></Stack.Screen>
+        component={SignInScreen}
+        options={{header: () => null}}></Stack.Screen>
       <Stack.Screen
         name="SignUp Screen"
-        component={SignUpScreen}></Stack.Screen>
-      <Stack.Screen name="AppBottomTab" component={AppBottomTab}></Stack.Screen>
+        component={SignUpScreen}
+        options={{header: () => null}}></Stack.Screen>
     </Stack.Navigator>
   );
 }

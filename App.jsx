@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,11 +18,24 @@ import {
 } from 'react-native';
 import AppBottomTab from './Navigators/AppBottomTab';
 import AppStack from './Navigators/AppStack';
+import auth from '@react-native-firebase/auth';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const subscribe = auth().onAuthStateChanged((user) => {
+      if (user !== null) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+    return subscribe;
+  }, []);
   return (
     <NavigationContainer>
-          <AppStack></AppStack>
+      {isLoggedIn ? <AppBottomTab></AppBottomTab> : <AppStack></AppStack>}
     </NavigationContainer>
   );
 }
