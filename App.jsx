@@ -19,14 +19,24 @@ import {
 import AppBottomTab from './Navigators/AppBottomTab';
 import AppStack from './Navigators/AppStack';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const subscribe = auth().onAuthStateChanged((user) => {
+    const subscribe = auth().onAuthStateChanged(async (user) => {
       if (user !== null) {
-        setIsLoggedIn(true);
+        await firestore()
+          .collection('users')
+          .doc(user.uid)
+          .onSnapshot((snapshot) => {
+            if (snapshot.exists) {
+              setIsLoggedIn(true);
+            } else {
+              console.log('Nothing Exists');
+            }
+          });
       } else {
         setIsLoggedIn(false);
       }

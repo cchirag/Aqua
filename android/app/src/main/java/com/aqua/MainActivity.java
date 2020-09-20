@@ -1,15 +1,3 @@
-package com.aqua;
-
-import com.facebook.react.ReactActivity;
-
-public class MainActivity extends ReactActivity {
-
-  /**
-   * Returns the name of the main component registered from JavaScript. This is used to schedule
-   * rendering of the component.
-   */
-  @Override
-  protected String getMainComponentName() {
-    return "aqua";
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fea0b828ed370c5675130859f48043c1aa40a0ab72b27daed497823b6392a2f9
+size 335

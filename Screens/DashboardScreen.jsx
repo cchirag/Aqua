@@ -38,31 +38,38 @@ const banners = [
 export default function DashboardScreen({navigation}) {
   const [drops, setDrops] = useState();
   const [greetingText, setGreetingText] = useState('');
-  const [waterConsumed, setWaterConsumed] = useState();
-  const [moneyDonated, setMoneyDonated] = useState();
-  const [bottleSaved, setBottleSaved] = useState();
+  const [waterConsumed, setWaterConsumed] = useState(0);
+  const [moneyDonated, setMoneyDonated] = useState(0);
+  const [bottleSaved, setBottleSaved] = useState(0);
   useEffect(() => {
-    firestore()
-      .collection('users')
-      .doc(auth().currentUser.uid)
-      .get()
-      .then(() => {
-        firestore()
-          .collection('users')
-          .doc(auth().currentUser.uid)
-          .onSnapshot((snapshot) => {
-            setDrops(snapshot.data().walletBalance);
-            setWaterConsumed(snapshot.data().waterConsumed);
-            setMoneyDonated(snapshot.data().moneyDonated);
-            setBottleSaved(snapshot.data().bottleSaved);
-          });
-      });
-
+    let isMounted = true;
+    async function fetchData() {
+      await firestore()
+        .collection('users')
+        .doc(auth().currentUser.uid)
+        .get()
+        .then(() => {
+          firestore()
+            .collection('users')
+            .doc(auth().currentUser.uid)
+            .onSnapshot((snapshot) => {
+              if (isMounted) {
+                setDrops(snapshot.data().walletBalance);
+                setWaterConsumed(snapshot.data().waterConsumed);
+                setMoneyDonated(snapshot.data().moneyDonated);
+                setBottleSaved(snapshot.data().bottleSaved);
+              }
+            });
+        });
+    }
+    fetchData();
     let date = new Date();
     let hrs = date.getHours();
     if (hrs < 12) setGreetingText('Good Morning');
     else if (hrs >= 12 && hrs <= 17) setGreetingText('Good Afternoon,');
     else if (hrs >= 17 && hrs <= 24) setGreetingText('Good Evening,');
+
+    return () => { isMounted = false }
   }, []);
   return (
     <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
@@ -138,7 +145,7 @@ export default function DashboardScreen({navigation}) {
               fontWeight: 'bold',
               alignSelf: 'flex-end',
             }}>
-            ${moneyDonated}
+            ${moneyDonated.toFixed(2)}
           </Text>
           <Text
             style={{
@@ -203,18 +210,7 @@ export default function DashboardScreen({navigation}) {
             }}></Entypo>
         </View>
       </View>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          navigation.navigate('Global Stats');
-        }}>
-        <View style={Styles.link}>
-          <MaterialIcons name="navigate-before" size={30}></MaterialIcons>
-          <Text style={{fontSize: 25, color: 'black', fontWeight: 'bold'}}>
-            Global Stats
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+      <ScrollView style = {{marginVertical: 30}} horizontal={true} showsHorizontalScrollIndicator={false}>
         {banners.map((banner) => {
           return (
             <CampaignBannerComponent
@@ -242,7 +238,7 @@ const Styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 5
+    marginTop: 5,
   },
   mapContainer: {
     marginRight: 20,

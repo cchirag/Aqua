@@ -48,7 +48,6 @@ export default function SignUpScreen({navigation}) {
                 walletBalance: 0,
                 waterConsumed: 0,
                 bottleSaved: 0,
-                issuedStickers: [],
               });
             })
             .catch((err) => Alert.alert('Error', err.message))

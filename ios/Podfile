@@ -8,6 +8,12 @@ target 'aqua' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'tipsi-stripe', :path => '../node_modules/tipsi-stripe'
+
   target 'aquaTests' do
     inherit! :complete
     # Pods for testing
